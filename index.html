@@ -9,6 +9,55 @@
     <title>Wordle</title>
 </head>
 <body>
+
+<h1>Wordle</h1>
+<div id="grelha">
+    <div class="linha">
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+    </div>
+    <div class="linha">
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+    </div>
+    <div class="linha">
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+    </div>
+    <div class="linha">
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+    </div>
+    <div class="linha">
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+    </div>
+    <div class="linha">
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+        <div class="celula"></div>
+    </div>
+</div>
+
+
+
 <div id="container_teclado">
     <div>
             <button class="tecla">Q</button>
@@ -32,6 +81,8 @@
             <button class="tecla">J</button>
             <button class="tecla">K</button>
             <button class="tecla">L</button>
+            <button class="tecla">Ç</button>
+
     </div>
     <div>
             <button class="tecla">Z</button>
@@ -43,9 +94,38 @@
             <button class="tecla">M</button>
             <button class="tecla">BACKSPACE</button>
             <button class="tecla">ENTER</button>
+
+    </div>
+    <div>
+        <button class="tecla" id="btnRegras">REGRAS</button>
     </div>
 </div>
 
+<!-- Pop-up de Regras -->
+<div id="popupRegras" class="popup">
+  <div class="popup-conteudo">
+    <span id="fecharPopup" class="fechar">&times;</span>
+    <h2>Regras do Jogo</h2>
+    <br>
+    <ul>
+      <li>Tem 6 tentativas para adivinhar a palavra secreta de 5 letras.</li>
+      <li>Letras certas na posição certa ficam <strong>verdes</strong>.</li>
+      <li>Letras certas na posição errada ficam <strong>amarelas</strong>.</li>
+      <li>Letras erradas ficam <strong>cinza</strong>.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="popupLetras" class="popup">
+  <div class="popup-conteudo">
+    <span id="fecharPopupLetras" class="fechar">&times;</span>
+    <h2>Porfavor, insira 5 letras</h2>   
+  </div>
+</div>
+
+
+
     <script src="script.js"></script>
+
 </body>
 </html>
