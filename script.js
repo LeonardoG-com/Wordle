@@ -1,118 +1,127 @@
+const keyboardButtons = document.querySelectorAll('#keyboard button');
 
-const teclas = document.querySelectorAll(".tecla");
-const linhas = document.querySelectorAll(".linha");
+// Abrir popup de regras
+const btnRegras = document.getElementById('btnRegras');
+const popupRegras = document.getElementById('popupRegras');
+const fecharPopup = document.getElementById('fecharPopup');
 
-let linhaAtual = 0;
-let colunaAtual = 0;
-
-teclas.forEach(tecla => {
-    tecla.addEventListener("click", () => {
-        const letra = tecla.textContent;
-
-        if (letra === "REGRAS") {
-            return; // impede que continue para o código da grelha
-        }
-if (letra === "ENTER") {
-    // Verifica se já foram inseridas 5 letras
-    if (colunaAtual < 5) {
-        document.getElementById("popupLetras").style.display = "flex";
-        return;
-    }
-
-    // Obter a palavra digitada
-    let palavra = "";
-    for (let i = 0; i < 5; i++) {
-        palavra += linhas[linhaAtual].children[i].textContent;
-    }
-
-    palavra = palavra.toUpperCase();
-
-    // Verifica se a palavra existe no JSON
-    if (!listaPalavras.includes(palavra)) {
-        alert("Palavra inválida!");
-        return;
-    }
-
-    // Verifica se é a palavra secreta
-    if (palavra === palavraSecreta) {
-        alert("Parabéns! Acertou a palavra!");
-        // Aqui pode adicionar código para terminar o jogo
-    } else {
-        alert("Palavra errada! Tente outra.");
-        // Pode adicionar cores ou dicas aqui
-        linhaAtual++;
-        colunaAtual = 0;
-    }
-
-    return;
-}
-
-
-
-        if (letra === "BACKSPACE") {
-            if (colunaAtual > 0) {
-                colunaAtual--;
-                const celula = linhas[linhaAtual].children[colunaAtual];
-                celula.textContent = "";
-            }
-            return;
-        }
-
-        // Se já preencheu 5 letras, não faz nada
-        if (colunaAtual >= 5) return;
-
-        // Insere a letra na célula
-        const celula = linhas[linhaAtual].children[colunaAtual];
-        celula.textContent = letra;
-        colunaAtual++;
-    });
+btnRegras.addEventListener('click', () => {
+    popupRegras.style.display = 'block';
 });
 
-
-// Pop-up de regras
-document.getElementById("btnRegras").addEventListener("click", () => {
-    document.getElementById("popupRegras").style.display = "block";
+// Fechar popup ao clicar no X
+fecharPopup.addEventListener('click', () => {
+    popupRegras.style.display = 'none';
 });
 
-document.getElementById("fecharPopup").addEventListener("click", () => {
-    document.getElementById("popupRegras").style.display = "none";
-});
-
-// Pop-up de letras em falta "X"
-document.getElementById("fecharPopupLetras").addEventListener("click", () => {
-    document.getElementById("popupLetras").style.display = "none";
-});
-
-// Fecha se clicar fora do conteúdo
-window.addEventListener("click", (event) => {
-    const popup = document.getElementById("popupRegras");
-    if (event.target === popup) {
-        popup.style.display = "none";
+// Fechar popup se clicar fora da área do conteúdo
+window.addEventListener('click', (event) => {
+    if (event.target === popupRegras) {
+        popupRegras.style.display = 'none';
     }
 });
 
-// Fecha se clicar fora do conteúdo letras em falta
-window.addEventListener("click", (event) => {
-    const popup = document.getElementById("popupLetras");
-    if (event.target === popup) {
-        popup.style.display = "none";
-    }
-});
-
-
-// Função para abrir ficheiro JSON
-let listaPalavras = [];
-let palavraSecreta = "";
 
 function carregarPalavras() {
-  fetch("words.json")
-    .then(res => res.json())
-    .then(data => {
-      listaPalavras = data.palavras.map(p => p.toUpperCase());
-      palavraSecreta = listaPalavras[Math.floor(Math.random() * listaPalavras.length)];
-      console.log("Palavra secreta:", palavraSecreta); // apenas para testes
-    })
-    .catch(err => console.error("Erro ao carregar o ficheiro JSON:", err));
+    fetch("words.json")
+        .then(res => res.json())
+        .then(data => {
+            listaPalavras = data.palavras.map(p => p.toUpperCase());
+            palavraSecreta = listaPalavras[Math.floor(Math.random() * listaPalavras.length)];
+            console.log("Palavra secreta:", palavraSecreta); 
+        })
+        .catch(err => console.error("Erro ao carregar JSON:", err));
 }
 
-carregarPalavras();
+for(let i = 0; i < keyboardButtons.length; i++) {
+    keyboardButtons[i].addEventListener('click', function(event) {
+        const key = event.target.textContent;
+        if(key.toUpperCase() === "Backspace".toUpperCase()) {
+            // Vai remover a última letra da linha atual
+            removerUltimaLetraLinha(0);
+        } else if(key.toUpperCase() === "Enter".toUpperCase()) {
+            // Verificar se tem o cumprimento necessário, se palavra é válida, obter o resultado para a palavra, mostrar o feedback e passar para a próxima linha
+            // Depois das verificações
+            if(board.length < MAX_LINHAS) {
+                adicionarLinha();
+            }
+        } else {
+            // Adicionar letra ao tabuleiro
+            adicionarLetraTabuleiro(key);
+        }
+    });
+}
+
+const MAX_LINHAS = 6;
+const board = [];
+const words = ["APPLE", "HELLO", "MAGIC", "HOUSE"];
+
+function isLinhaValida(linha) {
+    if(linha < 0 || linha >= MAX_LINHAS) {
+        console.error("Linha inválida");
+        return false;
+    }
+    return true;
+}
+
+function isPalavraValida(palavra) {
+    return words.includes(palavra.toUpperCase());
+}
+
+function adicionarLetraTabuleiro(letra) {
+    // TODO: Adicionar uma letra ao tabuleiro tanto no DOM quanto no array.
+    var linha = board.length - 1; // Linha atual onde a letra será adicionada
+    if(board.length < MAX_LINHAS && board[linha] == undefined) {
+        adicionarLinha(); // Adiciona uma nova linha se necessário
+        linha++;
+    }
+    if(!isLinhaValida(linha)) {
+        return;
+    }
+
+
+    if(board[linha].length < 5) {
+        board[linha] += letra;
+        desenharLetraTabuleiro(letra, linha, board[linha].length - 1);
+        console.log(`Letra '${letra}' adicionada à linha ${linha}.`);
+        console.log(board);
+    } else {
+        console.error("Linha já está completa.");
+        return;
+    }
+}
+
+function adicionarLinha() {
+        board.push("");
+}
+
+function removerUltimaLetraLinha(linha) { 
+    // TODO: Para o backspace, remover a última letra da linha especificada no tabuleiro.
+    var linha = board.length - 1;
+    
+    if(!isLinhaValida(linha)) {
+        return;
+    }
+    if(board[linha].length > 0) {
+        board[linha] = board[linha].slice(0, -1);
+        desenharLetraTabuleiro("", linha, board[linha].length)
+    } else {
+        console.error("Linha já está vazia.");
+    }
+}
+
+function desenharLetraTabuleiro(letra, linha, coluna) {
+    const cell = document.querySelector(`#board div:nth-child(${linha + 1}) div:nth-child(${coluna + 1})`);
+    if(cell) {
+        cell.textContent = letra;
+    } else {
+        console.error("Célula inválida para desenhar a letra.");
+    }
+}
+
+
+function getResultadoPalavra(palavraJogada, palavraCorreta) {
+    // TODO: Verifica se a jogada é correta. Devolve uma estrutura que indica quais letras estão corretas, erradas ou em posições erradas.
+}
+
+carregarPalavras()
