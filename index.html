@@ -61,7 +61,7 @@
     </div>
 
     <!-- Botão de Regras -->
-    <div>
+    <div id="regras">
         <button type="button" class="tecla" id="btnRegras">Regras</button>
     </div>
 
@@ -80,12 +80,34 @@
     </div>
 
     <!-- Pop-up de letras incompletas -->
-    <div id="popupLetras" class="popup">
-        <div class="popup-conteudo">
-            <span id="fecharPopupLetras" class="fechar">&times;</span>
-            <h2>Por favor, insira 5 letras</h2>
-        </div>
+<div id="popupLetrasIncompletas" class="popup">
+    <div class="popup-conteudo">
+        <span id="fecharPopupLetras" class="fechar">&times;</span>
+        <h2>Por favor, insira 5 letras</h2>
     </div>
+</div>
+
+
+    <!-- Pop-up quando é acertada a palavra -->
+<div id="popupVitoria" class="popup">
+    <div class="popup-conteudo">
+        <span id="fecharPopupVitoria" class="fechar">&times;</span>
+        <h2>Parabéns! Acertou na palavra.</h2>
+    </div>
+</div>
+
+
+<!-- Pop-up de fim de jogo (derrota) -->
+<div id="popupDerrota" class="popup">
+    <div class="popup-conteudo">
+        <span id="fecharPopupDerrota" class="fechar">&times;</span>
+        <h2 id="mensagemDerrota">Fim de jogo!</h2>
+    </div>
+</div>
+
+<div id="botaoReiniciar">
+    <button class="tecla" onclick="location.reload()">Jogar Novamente</button>
+</div>
     
     <script src="script.js"></script>
 </body>
