@@ -17,7 +17,6 @@ const fecharPopupVitoria = document.getElementById("fecharPopupVitoria");
 // Seleciona o botão de reinício (inicialmente escondido)
 const botaoReiniciar = document.getElementById("botaoReiniciar");
 
-
 // Seleciona elementos do popup de derrota
 const popupDerrota = document.getElementById("popupDerrota");
 const fecharPopupDerrota = document.getElementById("fecharPopupDerrota");
@@ -205,14 +204,15 @@ keyboardButtons.forEach(button => {
             const resultado = getResultadoPalavra(linhaAtual, palavraSecreta);
             aplicarCores(board.length - 1, resultado);
 
-            if (linhaAtual.toUpperCase() === palavraSecreta.toUpperCase()) {
-                popupVitoria.style.display = "block";
-            } else if (board.length < MAX_LINHAS) {
-                adicionarLinha();
+                      if (linhaAtual.toUpperCase() === palavraSecreta.toUpperCase()) {
+                popupVitoria.style.display = 'block';
+                atualizarEstatisticas(true);
+            } else if (board.length >= MAX_LINHAS) {
+                mensagemDerrota.textContent = `Fim de jogo! A palavra era: ${palavraSecreta}`;
+                popupDerrota.style.display = 'block';
+                atualizarEstatisticas(false);
             } else {
-                mensagemDerrota.textContent = `Fim de jogo! A palavra correta era: ${palavraSecreta}`;
-                popupDerrota.style.display = "block";
-
+                adicionarLinha(); // passa para a próxima linha
             }
 
         } else {
@@ -221,6 +221,40 @@ keyboardButtons.forEach(button => {
     });
 });
 
+// Atualiza as estatísticas do jogador no localStorage e na página
+function atualizarEstatisticas(venceu) {
+    // Vai buscar os valores atuais das estatísticas no localStorage (ou usa 0 se não existir)
+    let totalJogos = parseInt(localStorage.getItem("totalJogos") || "0");
+    let totalVitorias = parseInt(localStorage.getItem("totalVitorias") || "0");
+    let serieAtual = parseInt(localStorage.getItem("serieAtual") || "0");
+    let melhorSerie = parseInt(localStorage.getItem("melhorSerie") || "0");
+
+    // Sempre incrementa o número total de jogos
+    totalJogos++;
+
+    if (venceu) {
+        totalVitorias++;
+        serieAtual++;
+        if (serieAtual > melhorSerie) melhorSerie = serieAtual;
+    } else {
+        serieAtual = 0;
+    }
+
+    // Salva os novos valores no localStorage
+    localStorage.setItem("totalJogos", totalJogos);
+    localStorage.setItem("totalVitorias", totalVitorias);
+    localStorage.setItem("serieAtual", serieAtual);
+    localStorage.setItem("melhorSerie", melhorSerie);
+
+    // Atualiza os valores mostrados na página
+    document.getElementById("totalJogos").textContent = totalJogos;
+    document.getElementById("totalVitorias").textContent = totalVitorias;
+    document.getElementById("serieAtual").textContent = serieAtual;
+    document.getElementById("melhorSerie").textContent = melhorSerie;
+}
+
 // Inicializa o jogo
 carregarPalavras();
 adicionarLinha();
+atualizarEstatisticas(false); // apenas para mostrar os valores atuais
+
