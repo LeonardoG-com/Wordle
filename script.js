@@ -253,6 +253,43 @@ function atualizarEstatisticas(venceu) {
     document.getElementById("melhorSerie").textContent = melhorSerie;
 }
 
+// Evento para capturar teclas do teclado físico
+document.addEventListener("keydown", (event) => {
+    const key = event.key.toUpperCase();
+
+    if (key === "BACKSPACE") {
+        removerUltimaLetraLinha();
+    } else if (key === "ENTER") {
+        const linhaAtual = board[board.length - 1];
+
+        if (!palavraSecreta) return;
+
+        if (linhaAtual.length < 5) {
+            popupLetrasIncompletas.style.display = 'block';
+            return;
+        }
+
+        const resultado = getResultadoPalavra(linhaAtual, palavraSecreta);
+        aplicarCores(board.length - 1, resultado);
+
+        if (linhaAtual.toUpperCase() === palavraSecreta.toUpperCase()) {
+            popupVitoria.style.display = 'block';
+            atualizarEstatisticas(true);
+        } else if (board.length >= MAX_LINHAS) {
+            mensagemDerrota.textContent = `Fim de jogo! A palavra era: ${palavraSecreta}`;
+            popupDerrota.style.display = 'block';
+            atualizarEstatisticas(false);
+        } else {
+            adicionarLinha(); // passa para a próxima linha
+        }
+
+    } else if (/^[A-Z]$/.test(key)) { // apenas letras A-Z
+        adicionarLetraTabuleiro(key);
+    }
+});
+
+
+
 // Inicializa o jogo
 carregarPalavras();
 adicionarLinha();
